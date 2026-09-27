@@ -1,0 +1,33 @@
+{
+  "auto": [
+    { "text": "上号吗？", "cond": "evening", "w": 4 },
+    { "text": "辛苦啦", "cond": "evening", "w": 3 },
+    { "text": "加油哦", "cond": "morning", "w": 3 },
+    { "text": "今天也要开心", "cond": "morning_first", "w": 5 },
+    { "text": "不要熬夜", "cond": "night", "w": 4 },
+    { "text": "别熬夜啦", "cond": "night", "w": 3, "minAffinity": 60 },
+    { "text": "想我莓", "w": 2 },
+    { "text": "得劲", "w": 2 },
+    { "text": "好样的", "w": 1 },
+    { "text": "我以后就住你手机里了", "cond": "rare", "w": 1 }
+  ],
+  "birthday": ["生日快乐！", "今天你最大！", "生日也要记得上号呀", "新的一岁，得劲！"],
+  "food": {
+    "cake": { "line": "好吃！今天生日嘛", "emo": "🎂" },
+    "milktea": { "line": "全糖去冰，谢啦", "emo": "🧋" },
+    "strawberry": { "line": "想我莓～", "emo": "🍓" },
+    "noodle": { "line": "这个也行，得劲", "emo": "💨" },
+    "cola": { "line": "嗝——爽", "emo": "🥤" },
+    "icecream": { "line": "少吃冰的，你也是", "emo": "🍦" }
+  },
+  "body": ["干嘛", "在呢", "上号吗？", "嘿嘿"],
+  "sleepWake": "唔……干嘛呀",
+  "full": "吃不下了，真的",
+  "hungry": "饿了",
+  "lonely": "不理我了吗",
+  "back": ["在吗？", "回来啦"],
+  "longGone": "好久不见，以为你不要我了",
+  "dragFast": "慢点慢点",
+  "dragStart": "哇——",
+  "firstAdopt": "我以后就住你手机里啦。"
+}
