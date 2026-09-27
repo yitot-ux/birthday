@@ -1,11 +1,13 @@
 /* sw.js — 桌宠 PWA 缓存（cache-first） */
-const CACHE = 'pet-cache-v1';
+const CACHE = 'pet-cache-v2';
 const ASSETS = [
   './',
   './index.html',
   './pet.js',
   './manifest.json',
   './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
   '../js/pixel.js',
   '../js/audio.js',
 ];
