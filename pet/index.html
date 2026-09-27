@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -43,7 +45,10 @@
 <body>
   <div id="topbar">
     <div id="stats"></div>
-    <button id="btn-settings" class="icon-btn">⚙ 设置</button>
+    <div style="display:flex;gap:6px;">
+      <button id="btn-install" class="icon-btn" style="display:none;">📥 安装</button>
+      <button id="btn-settings" class="icon-btn">⚙ 设置</button>
+    </div>
   </div>
 
   <div id="pet-layer"></div>
@@ -97,6 +102,21 @@
     pet.state.ownerCall = c;
     pet.save();
     document.getElementById('panel').classList.remove('show');
+  });
+
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btn-install').style.display = 'inline-block';
+  });
+  document.getElementById('btn-install').addEventListener('click', function () {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function () {
+      deferredPrompt = null;
+      document.getElementById('btn-install').style.display = 'none';
+    });
   });
 
   if ('serviceWorker' in navigator) {
