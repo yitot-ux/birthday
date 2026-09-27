@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>给毛毛的生日祝福</title>
+<meta name="theme-color" content="#241b33">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 全局标题（连点 10 次触发彩蛋） -->
+  <div id="main-title" style="position:fixed;top:10px;left:14px;z-index:60;font-size:11px;color:var(--gold);opacity:.8;cursor:pointer;">徐毛毛の生日</div>
+
+  <!-- ===== 0 加载页 ===== -->
+  <section id="scene-loading" class="scene active">
+    <div class="loading-text">正在连接 Player 2…</div>
+    <div class="loading-sub">信号穿越 1024 公里</div>
+    <div class="signal-bar"><div id="signal-fill" class="signal-fill"></div></div>
+    <div id="loading-hint" class="loading-hint">加载中…</div>
+  </section>
+
+  <!-- ===== 1 开场 ===== -->
+  <section id="scene-opening" class="scene">
+    <div class="opening-stage">
+      <div id="char-left" class="char-left"><div class="char-tag">毛毛</div></div>
+      <div id="char-right" class="char-right"><div class="char-tag">菲菲</div></div>
+      <svg id="opening-link" class="opening-link" viewBox="0 0 300 40" preserveAspectRatio="none">
+        <path d="M0,20 C25,2 50,38 75,20 C100,2 125,38 150,20 C175,2 200,38 225,20 C250,2 275,38 300,20" fill="none" stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div id="opening-fist" class="opening-fist"></div>
+    </div>
+    <canvas id="opening-canvas" class="opening-canvas"></canvas>
+    <button id="btn-connect" class="px-btn">开始联机</button>
+  </section>
+
+  <!-- ===== 2 一起打游戏 ===== -->
+  <section id="scene-gaming" class="scene">
+    <div id="gaming-stage" class="gaming-stage">
+      <div id="tv" class="tv"><canvas id="tv-screen" class="tv-screen"></canvas></div>
+      <div class="couch"></div>
+      <div class="coffee-table">
+        <div class="fruit fruit-1">🍎</div>
+        <div class="fruit fruit-2">🍇</div>
+        <div class="fruit fruit-3">🍊</div>
+      </div>
+      <div id="gamer-p1" class="gamer p1"></div>
+      <div id="gamer-p2" class="gamer p2"></div>
+    </div>
+    <canvas id="gaming-canvas" class="gaming-canvas"></canvas>
+    <button id="btn-next-gaming" class="px-btn pink">继续 ▶</button>
+  </section>
+
+  <!-- ===== 3 一起听歌 ===== -->
+  <section id="scene-music" class="scene">
+    <div class="music-stage">
+      <div class="headphone-wire"></div>
+      <div class="music-duo">
+        <div id="music-duo-p1"></div>
+        <div id="music-duo-p2"></div>
+      </div>
+    </div>
+    <div class="music-info">
+      <div id="music-title" class="music-title">♪</div>
+      <div id="spectrum" class="spectrum"></div>
+      <button id="btn-play" class="px-btn">▶ 播放</button>
+      <button id="btn-switch" class="px-btn pink" style="margin-left:10px;">切歌</button>
+    </div>
+    <button id="btn-next-music" class="px-btn" style="margin-top:20px;">继续 ▶</button>
+    <canvas id="music-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+  </section>
+
+  <!-- ===== 4 一起看风景 ===== -->
+  <section id="scene-scenery" class="scene">
+    <div class="scenery-stage">
+      <div id="sky" class="sky"></div>
+      <div id="cityline" class="cityline"></div>
+      <div id="scenery-duo" class="scenery-duo">
+        <div id="scenery-duo-p1"></div>
+        <div id="scenery-duo-p2"></div>
+      </div>
+    </div>
+    <div class="scenery-hint">点小人互动</div>
+    <button id="btn-next-scenery" class="px-btn">继续 ▶</button>
+  </section>
+
+  <!-- ===== 5 合作小游戏 ===== -->
+  <section id="scene-minigame" class="scene">
+    <div class="cake-row">
+      <div class="cake"><div class="candle">🕯️</div><div class="cake-body">🍰</div></div>
+      <div class="cake"><div class="candle">🕯️</div><div class="cake-body">🍰</div></div>
+      <div class="cake"><div class="candle">🕯️</div><div class="cake-body">🍰</div></div>
+    </div>
+    <div class="hbd-letters">
+      <span class="hbd-letter">H</span><span class="hbd-letter">B</span><span class="hbd-letter">D</span>
+    </div>
+    <div class="minigame-duo">
+      <div id="minigame-duo-p1"></div>
+      <div id="minigame-duo-p2"></div>
+    </div>
+    <p style="font-size:10px;color:var(--cream-dim);margin-top:16px;">点蜡烛，一起点亮 HBD</p>
+    <button id="btn-next-minigame" class="px-btn hidden" style="margin-top:16px;">继续 ▶</button>
+  </section>
+
+  <!-- ===== 6 祝福信 ===== -->
+  <section id="scene-letter" class="scene">
+    <div id="letter-paper" class="letter-paper">
+      <div id="letter-text"></div>
+      <div class="letter-wait">
+        <div id="letter-wait-p1"></div>
+        <div id="letter-wait-p2"></div>
+      </div>
+      <div class="letter-hint">点击信纸加速</div>
+    </div>
+    <button id="btn-next-letter" class="px-btn hidden" style="margin-top:70px;">继续 ▶</button>
+  </section>
+
+  <!-- ===== 7 吹蜡烛 ===== -->
+  <section id="scene-candle" class="scene">
+    <div class="cake-wrap">
+      <div class="cake-flames">
+        <div class="blow-flame">🕯️</div>
+        <div class="blow-flame">🕯️</div>
+        <div class="blow-flame">🕯️</div>
+      </div>
+      <div class="cake-layer cake-layer-3"></div>
+      <div class="cake-layer cake-layer-2"></div>
+      <div class="cake-layer cake-layer-1"></div>
+      <div class="cake-plate"></div>
+    </div>
+    <div class="blow-duo">
+      <div id="blow-duo-p1"></div>
+      <div id="blow-duo-p2"></div>
+    </div>
+    <div id="blow-hint" class="blow-hint"></div>
+  </section>
+
+  <!-- ===== 8 粉红气泡称呼 ===== -->
+  <section id="scene-bubbles" class="scene">
+    <div id="bubble-zone" class="bubble-zone"></div>
+    <canvas id="bubble-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+    <button id="btn-skip-bubbles" class="px-btn" style="position:absolute;bottom:20px;right:16px;font-size:10px;padding:10px 14px;">跳过</button>
+  </section>
+
+  <!-- ===== 9 粒子爱心 ===== -->
+  <section id="scene-heart" class="scene">
+    <canvas id="heart-canvas"></canvas>
+    <div id="heart-duo" class="heart-duo">
+      <div id="heart-duo-p1"></div>
+      <div id="heart-duo-p2"></div>
+    </div>
+    <div class="heart-hint">点击爱心炸开</div>
+    <button id="btn-next-heart" class="px-btn" style="position:absolute;bottom:20px;right:16px;">继续 ▶</button>
+  </section>
+
+  <!-- ===== 10 桌宠领取 ===== -->
+  <section id="scene-adopt" class="scene">
+    <div class="adopt-heart">💖</div>
+    <div id="adopt-pet" class="adopt-pet"></div>
+    <div class="adopt-line">“以后我住你手机里啦。”</div>
+    <span class="adopt-name">咪</span>
+    <div class="adopt-install">
+      <b>📱 把我装到主屏幕：</b><br>
+      <b>iPhone</b>：Safari → 分享 → 添加到主屏幕<br>
+      <b>Android</b>：Chrome → 菜单 → 添加到主屏幕 / 安装应用<br>
+      <b>微信</b>：右上角 → 在浏览器打开，再按上面操作
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;">
+      <button id="btn-open-pet" class="px-btn">让它陪我</button>
+      <button id="btn-share" class="px-btn pink">保存截图</button>
+      <button id="btn-next-adopt" class="px-btn" style="display:none;">下一步</button>
+    </div>
+  </section>
+
+  <!-- ===== 11 隐藏彩蛋 ===== -->
+  <section id="scene-easter" class="scene">
+    <div id="easter-rainbow" class="easter-rainbow">🌈</div>
+    <div id="easter-text" class="easter-text"></div>
+    <div class="easter-input">
+      <input id="easter-secret" type="text" placeholder="输入暗号…">
+    </div>
+    <button id="btn-easter-close" class="px-btn" style="margin-top:24px;">返回</button>
+  </section>
+
+  <!-- 黑屏过渡 -->
+  <div id="fade-overlay"></div>
+  <!-- 桌宠浮层 -->
+  <div id="pet-layer"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script src="js/pixel.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/particles.js"></script>
+<script src="pet/pet.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+  // 保存截图（html2canvas，可选）
+  document.getElementById('btn-share').addEventListener('click', function () {
+    if (!window.html2canvas) { alert('截图组件未加载'); return; }
+    var el = document.getElementById('scene-adopt');
+    html2canvas(el, { backgroundColor: '#3a2a4a' }).then(function (canvas) {
+      var a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = '生日祝福-菲菲.png';
+      a.click();
+    });
+  });
+</script>
+</body>
+</html>
