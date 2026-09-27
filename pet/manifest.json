@@ -1,0 +1,14 @@
+{
+  "name": "咪 · 桌宠",
+  "short_name": "咪",
+  "description": "像素桌宠「咪」——住在你手机里的黑白小猫",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#241b33",
+  "theme_color": "#241b33",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
