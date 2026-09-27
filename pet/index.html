@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>咪 · 桌宠</title>
+<meta name="theme-color" content="#241b33">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root { --bg-0:#241b33; --bg-1:#3a2a4a; --cream:#fff0e0; --pink-deep:#ff6fa5; --gold:#ffd166; --orange:#ff9d3c; }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html,body { width:100%; height:100%; overflow:hidden; background:linear-gradient(180deg,var(--bg-1),var(--bg-0)); color:var(--cream); font-family:'Press Start 2P','Courier New',monospace; touch-action:manipulation; user-select:none; -webkit-user-select:none; }
+  #topbar { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:10px 12px; z-index:10; }
+  #stats { font-size:9px; color:var(--cream); opacity:.85; line-height:1.8; }
+  #stats b { color:var(--gold); }
+  .icon-btn { background:var(--pink-deep); color:#2a1a26; border:0; font-family:inherit; font-size:10px; padding:8px 12px; cursor:pointer; box-shadow:0 3px 0 #d54f86; }
+  #pet-layer { position:fixed; inset:0; pointer-events:none; z-index:20; }
+  #pet-layer canvas { pointer-events:auto; }
+  .pet-nameplate { position:absolute; transform:translate(-50%,-100%); background:var(--pink-deep); color:#2a1a26; font-size:10px; padding:3px 8px; border-radius:4px; white-space:nowrap; pointer-events:none; }
+  .pet-bubble { position:absolute; transform:translate(-50%,-130%); background:#fff; color:#2a1a26; font-size:11px; padding:8px 10px; border-radius:8px; white-space:nowrap; pointer-events:none; }
+  .pet-menu { position:fixed; background:rgba(36,27,51,.95); border:2px solid var(--pink-deep); padding:6px; border-radius:6px; z-index:30; }
+  .pet-menu button { display:block; width:100%; font-family:inherit; background:none; color:var(--cream); border:0; padding:8px 14px; font-size:11px; cursor:pointer; text-align:left; }
+  .pet-menu button:hover { background:var(--pink-deep); color:#2a1a26; }
+  .food-menu { display:flex; gap:6px; flex-wrap:wrap; width:180px; }
+  .food-menu button { width:auto; font-size:16px; padding:6px 8px; }
+  #panel { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:40; display:none; align-items:center; justify-content:center; }
+  #panel.show { display:flex; }
+  .panel-box { background:var(--bg-1); border:3px solid var(--pink-deep); padding:20px; width:min(420px,90%); font-size:10px; line-height:2; }
+  .panel-box input { font-family:inherit; font-size:11px; padding:8px; width:100%; background:var(--bg-0); color:var(--cream); border:2px solid var(--cream); margin:6px 0; outline:none; }
+  .panel-box h3 { color:var(--gold); margin-bottom:8px; font-size:12px; }
+  .panel-box button { font-family:inherit; background:var(--orange); color:#2a1a26; border:0; padding:10px 14px; font-size:11px; cursor:pointer; margin-top:8px; }
+  .install-tip { margin-top:12px; color:var(--cream); opacity:.8; }
+  .install-tip b { color:var(--gold); }
+  #hint { position:fixed; bottom:calc(env(safe-area-inset-bottom,0px) + 14px); left:0; right:0; text-align:center; font-size:9px; color:var(--cream); opacity:.5; z-index:5; }
+</style>
+</head>
+<body>
+  <div id="topbar">
+    <div id="stats"></div>
+    <button id="btn-settings" class="icon-btn">⚙ 设置</button>
+  </div>
+
+  <div id="pet-layer"></div>
+  <div id="hint">点我摸头 · 长按投喂 · 拖拽移动 · 双击打招呼</div>
+
+  <div id="panel">
+    <div class="panel-box">
+      <h3>设置</h3>
+      <label>桌宠名字（默认「咪」）</label>
+      <input id="in-name" type="text" placeholder="咪">
+      <label>生日者怎么叫我（摸头时优先冒）</label>
+      <input id="in-call" type="text" placeholder="例如：毛毛 / 振儿">
+      <button id="btn-save">保存</button>
+      <div class="install-tip">
+        <b>📱 添加到主屏幕：</b><br>
+        iPhone：Safari → 分享 → 添加到主屏幕<br>
+        Android：Chrome → 菜单 → 添加到主屏幕 / 安装应用
+      </div>
+    </div>
+  </div>
+
+<script src="../js/pixel.js"></script>
+<script src="../js/audio.js"></script>
+<script src="pet.js"></script>
+<script>
+  var KEY = 'pet_state_v1';
+  var pet = new DesktopPet(document.getElementById('pet-layer'));
+  pet.spawn();
+
+  function refreshStats() {
+    var s = pet.state;
+    document.getElementById('stats').innerHTML =
+      '已陪你 <b>' + s.days + '</b> 天<br>' +
+      '亲密度 <b>' + s.affinity + '</b> · 饱食 <b>' + s.fullness + '</b> · 心情 <b>' + s.mood + '</b>';
+  }
+  refreshStats();
+  setInterval(refreshStats, 5000);
+
+  document.getElementById('btn-settings').addEventListener('click', function () {
+    document.getElementById('panel').classList.add('show');
+    document.getElementById('in-name').value = pet.state.petName;
+    document.getElementById('in-call').value = pet.state.ownerCall;
+  });
+  document.getElementById('panel').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+  document.getElementById('btn-save').addEventListener('click', function () {
+    var n = document.getElementById('in-name').value.trim();
+    var c = document.getElementById('in-call').value.trim();
+    if (n) { pet.state.petName = n; pet.nameplate.textContent = n; }
+    pet.state.ownerCall = c;
+    pet.save();
+    document.getElementById('panel').classList.remove('show');
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>
